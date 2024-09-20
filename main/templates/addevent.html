@@ -1,0 +1,328 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <title>Add Event | Community Pulse</title>
+
+  <style>
+    @media (min-width: 768px) {
+      .main.active {
+        margin-left: 0px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="text-gray-800 font-inter">
+  <!--sidenav -->
+  <div class="fixed left-0 top-0 w-64 h-full bg-[#fff] p-4 z-50 sidebar-menu transition-transform">
+    <a href="{% url 'home' %}" class="flex items-center pb-4 border-b border-b-gray-800">
+      <img src="{% static 'images/logo.png' %}" alt="" srcset="" width="150px">
+    </a>
+    <ul class="mt-4">
+      <li class="mb-1 group">
+        <a href="{% url 'addevent' %}"
+          class="flex font-semibold items-center py-4 px-4 bg-[#1082CE] text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+          <i class="ri-calendar-todo-fill mr-3 text-lg"></i>
+          <span class="text-sm">Post an Event</span>
+        </a>
+      </li>
+      <li class="mb-1 group">
+        <a href="{% url 'dashboard' %}"
+          class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:text-[#1082CE] rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+          <i class="ri-home-2-line mr-3 text-lg"></i>
+          <span class="text-sm active">Dashboard</span>
+        </a>
+      </li>
+      <li class="mb-1 group">
+        <a href="{% url 'events' %}" target="_blank"
+          class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:text-[#1082CE] rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+          <i class="ri-map-pin-2-line mr-3 text-lg"></i>
+          <span class="text-sm">Find Nearby Events</span>
+        </a>
+      </li>
+      <li class="mb-1 group">
+        <a href="{% url 'posted_events' %}"
+          class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:text-[#1082CE] rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+          <i class="ri-calendar-event-line mr-3 text-lg"></i>
+          <span class="text-sm">Your Posted Events</span>
+        </a>
+      </li>
+      <li class="mb-1 group">
+        <a href="{% url 'confirmed_events' %}"
+          class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:text-[#1082CE] rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+          <i class="ri-checkbox-circle-line mr-3 text-lg"></i>
+          <span class="text-sm">Confirmed Events</span>
+        </a>
+      </li>
+      <li class="mt-auto fixed bottom-2">
+        <a href="{% url 'logout' %}"
+          class="flex font-semibold items-center py-2 px-4 text-red-900 hover:text-[#1082CE] rounded-md">
+          <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+          <span class="text-sm">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+
+  <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-100 min-h-screen transition-all main">
+    <div class="py-2 px-6  flex items-center bg-gray-300 shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+      <button type="button" class="text-lg text-gray-900 font-semibold sidebar-toggle">
+        <i class="ri-menu-line"></i>
+      </button>
+
+      <ul class="ml-auto flex items-center">
+
+        <li class="dropdown">
+          <button type="button"
+            class="dropdown-toggle text-gray-400 mr-4 w-8 h-8 rounded flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="rounded-full" viewBox="0 0 24 24"
+              style="fill: gray;transform: ;msFilter:;">
+              <path
+                d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z">
+              </path>
+            </svg>
+          </button>
+        </li>
+        <button id="fullscreen-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="rounded-full" viewBox="0 0 24 24"
+            style="fill: gray;transform: ;msFilter:;">
+            <path d="M5 5h5V3H3v7h2zm5 14H5v-5H3v7h7zm11-5h-2v5h-5v2h7zm-2-4h2V3h-7v2h5z"></path>
+          </svg>
+        </button>
+        <script>
+          const fullscreenButton = document.getElementById('fullscreen-button');
+
+          fullscreenButton.addEventListener('click', toggleFullscreen);
+
+          function toggleFullscreen() {
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              document.documentElement.requestFullscreen();
+            }
+          }
+        </script>
+
+        <li class="dropdown ml-3">
+          <button type="button" class="dropdown-toggle flex items-center">
+            <div class="flex-shrink-0 w-10 h-10 relative">
+              <div class="p-1 bg-white rounded-full focus:outline-none focus:ring">
+                <img class="w-8 h-8 rounded-full"
+                  src="https://laravelui.spruko.com/tailwind/ynex/build/assets/images/faces/9.jpg" alt="" />
+                <div class="top-0 left-7 absolute w-3 h-3 bg-lime-400 border-2 border-white rounded-full animate-ping">
+                </div>
+                <div class="top-0 left-7 absolute w-3 h-3 bg-lime-500 border-2 border-white rounded-full"></div>
+              </div>
+            </div>
+            <div class="p-2 md:block text-left">
+              <h2 class="text-sm font-semibold text-gray-800">{{ user_info.name }}</h2>
+              <p class="text-xs text-gray-500">User</p>
+            </div>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+<div class="p-6 bg-gray-100 min-h-screen">
+  <div class="container mx-auto max-w-7xl">
+    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+      <div class="md:flex">
+        <div class="md:w-1/2 p-10">
+          <form enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <div class="mb-5">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Event Name</label>
+              <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="name" placeholder="Your Event Name" required>
+            </div>
+            <div class="mb-5">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Event Poster</label>
+              <input type="file" name="poster" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            </div>
+            <div class="mb-5">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Event Category</label>
+              <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="category" placeholder="Category Name" required>
+            </div>
+            <div class="flex justify-between gap-4 mb-5">
+              <div class="w-full">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Start Date</label>
+                <input type="date" name="st_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  required>
+              </div>
+              <div class="w-full">
+                <label class="block text-gray-700 text-sm font-bold mb-2">End Date</label>
+                <input type="date" name="en_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 mb-5">
+              <label class="block text-gray-700 text-sm font-bold">Event Type:</label>
+              <div class="flex items-center">
+                <input id="free" type="radio" name="event_type" value="free" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" required>
+                <label for="free" class="ml-2 text-sm font-medium text-gray-700">Free</label>
+              </div>
+              <div class="flex items-center">
+                <input id="paid" type="radio" name="event_type" value="paid" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" required>
+                <label for="paid" class="ml-2 text-sm font-medium text-gray-700">Paid</label>
+              </div>
+            </div>
+            <div id="price_container" class="mb-5 hidden">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Event Price</label>
+              <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Event Price" name="price">
+            </div>
+            <div class="flex justify-between gap-4 mb-5">
+              <div class="w-full">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Start Time</label>
+                <input type="time" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="st_time" required>
+              </div>
+              <div class="w-full">
+                <label class="block text-gray-700 text-sm font-bold mb-2">End Time</label>
+                <input type="time" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="en_time" required>
+              </div>
+            </div>
+            <div class="mb-5">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Event Host Name</label>
+              <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Host Name" name="host_name" required>
+            </div>
+            <div class="mb-5">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Event Location</label>
+              <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Location" name="location">
+            </div>
+            <div class="mb-5">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Mobile Number</label>
+              <div class="flex">
+                <select name="co_code" class="shadow border rounded-l w-20 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                  <option>+1</option>
+                  <option>+44</option>
+                  <option>+91</option>
+                </select>
+                <input type="text" class="shadow appearance-none border-t border-b border-r rounded-r w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="mobile" placeholder="123-456-7890" required>
+              </div>
+            </div>
+            <div class="flex justify-between">
+              <button class="bg-[#1082CE] hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" name="submit">
+                Submit
+              </button>
+              <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" name="cancel">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="md:w-1/2 bg-blue-600 p-10 text-white">
+          <h2 class="text-4xl font-bold mb-6">Event Registration</h2>
+          <p>Complete the form with your event details to get listed. Attract more attendees with a catchy name and clear information.</p>
+          <div class="mt-4 bg-white bg-opacity-10 p-4 rounded-lg">
+            <p class="font-semibold">Tips for a successful event listing:</p>
+            <ul class="list-disc ml-4">
+              <li>Use a clear and descriptive event name.</li>
+              <li>Include all relevant details for your attendees.</li>
+              <li>Choose an attractive event poster.</li>
+            </ul>
+          </div>
+          <div class="bg-white mt-4 rounded-lg flex justify-center">
+            <img src="{% static 'images/addevent.svg' %}" alt="" srcset="" width="400px">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  </main>
+
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function formatDate(date) {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+  
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+  
+        return [year, month, day].join('-');
+      }
+  
+      const today = formatDate(new Date());
+  
+      document.querySelector('[name="st_date"]').setAttribute('min', today);
+      document.querySelector('[name="en_date"]').setAttribute('min', today);
+    });
+  </script>
+  
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const datePicker = document.getElementById('datePicker');
+    const today = new Date().toISOString().split('T')[0];
+    datePicker.setAttribute('min', today);
+  });
+
+  const radioPaid = document.getElementById('paid');
+  const priceContainer = document.getElementById('price_container');
+
+  radioPaid.addEventListener('change', function() {
+    if(this.checked) {
+      priceContainer.style.display = 'block';
+    }
+  });
+
+  document.getElementById('free').addEventListener('change', function() {
+    if(this.checked) {
+      priceContainer.style.display = 'none';
+    }
+  });
+</script>
+  <script>
+    const sidebarToggle = document.querySelector('.sidebar-toggle')
+    const sidebarOverlay = document.querySelector('.sidebar-overlay')
+    const sidebarMenu = document.querySelector('.sidebar-menu')
+    const main = document.querySelector('.main')
+    sidebarToggle.addEventListener('click', function (e) {
+      e.preventDefault()
+      main.classList.toggle('active')
+      sidebarOverlay.classList.toggle('hidden')
+      sidebarMenu.classList.toggle('-translate-x-full')
+    })
+    sidebarOverlay.addEventListener('click', function (e) {
+      e.preventDefault()
+      main.classList.add('active')
+      sidebarOverlay.classList.add('hidden')
+      sidebarMenu.classList.add('-translate-x-full')
+    })
+    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        e.preventDefault()
+        const parent = item.closest('.group')
+        if (parent.classList.contains('selected')) {
+          parent.classList.remove('selected')
+        } else {
+          document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function (i) {
+            i.closest('.group').classList.remove('selected')
+          })
+          parent.classList.add('selected')
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
